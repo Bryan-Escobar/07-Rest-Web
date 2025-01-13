@@ -1,9 +1,6 @@
-import http2 from 'http2';
+import http from 'http';
 import fs from 'fs';
-const server=http2.createSecureServer({
-    key:fs.readFileSync('./keys/server.key'),
-    cert:fs.readFileSync('./keys/server.crt')
-},
+const server=http.createServer(
     (req,res)=>{
         console.log(req.url);
         // res.write('Hello World');
@@ -30,15 +27,14 @@ const server=http2.createSecureServer({
         else if (req.url?.endsWith('.css')){
             res.writeHead(200,{'Content-Type':'text/css'});
         }
-        // console.log(`url==========> ./public${req.url}`);
-        try {
-            
-            const responseContent=fs.readFileSync(`./public${req.url}`,'utf-8');
-            res.write(responseContent);
-        } catch (error) {
-            res.writeHead(404,{'Content-Type':'text/html'});
-        }
-
+        console.log(`url==========> ./public${req.url}`);
+        const responseContent=fs.readFileSync(`./public${req.url}`,'utf-8');
+        res.write(responseContent);
+        // else
+        // {
+        //     res.writeHead(404,{'Content-Type':'text/html'});
+        //     // res.write('<h1>404 Not Found</h1>');
+        // }
         res.end();
         // application/javascript
         // text/css

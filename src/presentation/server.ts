@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 interface Options {
     port: number;
-    publicPath?: string;
+    publicPath: string;
 }
 export class Server {
     private app = express();
@@ -10,9 +10,8 @@ export class Server {
     private readonly publicPath: string;
     constructor(private options: Options) 
     {
-        const {port, publicPath='public'} = options;
-        this.port = port;
-        this.publicPath = publicPath;
+        this.port = options.port;
+        this.publicPath = options.publicPath;
     }
 
     async start() {

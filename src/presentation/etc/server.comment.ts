@@ -10,7 +10,7 @@ export class Server {
     private readonly port: number;
     private readonly publicPath: string;
     private readonly routes: Router;
-
+    
     constructor(private options: Options) {
         const { port, routes,publicPath = 'public' } = options;
         this.port = port;
@@ -29,7 +29,14 @@ export class Server {
 
 
         //* routes
-        this.app.use(this.routes);
+        //'/api/todos' es la ruta que se va a escuchar
+        //res.json solo se puede realizar una vez por ruta
+        // this.app.get('/api/todos', (req, res) => {
+        //     res.json([
+        //         { id: 1, text: 'buy milk', createdAt: new Date() },
+        //         { id: 2, text: 'buy bread', createdAt: new Date() },
+        //     ]);
+        // });
 
 
         //* SPA

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../../data/postgres";
+import { CreateTodoDto } from "./../../domain/dtos";
 export class TodosController {
     //* DI (dependency injection)
     constructor() {
@@ -26,26 +27,23 @@ export class TodosController {
 
     }
     public createTodo = async (req: Request, res: Response) => {
-        const { text, completedAt } = req.body;
-        let newTodo = null
-        if (text) {
-            if (completedAt) {
-
-                newTodo = await prisma.todo.create({
-                    data: { text, completedAt }
-                })
-            }
-            else {
-                newTodo = await prisma.todo.create({
-                    data: { text }
-                })
-            }
-
-            res.status(201).json(newTodo);
+        //const { text } = req.body;
+        // if (!text) {
+        //     res.status(400).json({ message: 'text is required' });
+        //     return;
+        // }
+        const [error, createTodoDto] = CreateTodoDto.create(req.body);
+        if(error)
+        {
+            res.status(400).json({message:error});
             return;
         }
-        res.status(400).json({ message: 'text is required' });
+        const newTodo = await prisma.todo.create({
+            data:createTodoDto! //el ! indica que no puede ser null
+        })
+        res.status(201).json(newTodo);
         return;
+
     }
     public updateTodo = async (req: Request, res: Response) => {
         const id = +req.params.id;

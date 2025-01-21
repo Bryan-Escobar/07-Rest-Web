@@ -48,6 +48,7 @@ export class TodosController {
     public updateTodo = async (req: Request, res: Response) => {
         const id = +req.params.id;
         const [error,updateTodoDto]=UpdateTodoDto.create({...req.body,id});
+
         //...req.body indica que se envian todos los datos del body, se copian todas sus propiedades y se le añaide el id
         if(error)
         {
@@ -74,7 +75,6 @@ export class TodosController {
         //     return
         // }
 
-        console.log('=========>',updateTodoDto?.values);
         //actualizacon de los datos
         const updatedTodo = await prisma.todo.update({
             where: { id: id },

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../../data/postgres";
-import { CreateTodoDto } from "./../../domain/dtos";
+import { CreateTodoDto, UpdateTodoDto } from "./../../domain/dtos";
 export class TodosController {
     //* DI (dependency injection)
     constructor() {
@@ -47,10 +47,14 @@ export class TodosController {
     }
     public updateTodo = async (req: Request, res: Response) => {
         const id = +req.params.id;
-        if (!this.isIdValid(id, res)) {
-
+        const [error,updateTodoDto]=UpdateTodoDto.create({...req.body,id});
+        //...req.body indica que se envian todos los datos del body, se copian todas sus propiedades y se le añaide el id
+        if(error)
+        {
+            res.status(400).json({message:error});
             return;
         }
+
         const todo = await this.findTodoById(id);
 
         if (!todo) {
@@ -59,21 +63,22 @@ export class TodosController {
         }
 
         //validaciones de los datos enviados
-        let { text, completedAt } = req.body;
-        if (!completedAt) { //si no se envia completedAt, se mantiene el valor actual
-            completedAt = todo.completedAt;
-        }
-        if (isNaN(new Date(completedAt).getTime())) { //verifica que completedAt sea una fecha valida
+        // let { text, completedAt } = req.body;
+        // if (!completedAt) { //si no se envia completedAt, se mantiene el valor actual
+        //     completedAt = todo.completedAt;
+        // }
+        // if (isNaN(new Date(completedAt).getTime())) { //verifica que completedAt sea una fecha valida
 
-            res.status(400).json({ message: 'completedAt must be a valid date' });
-            console.log('no es una fecha valida');
-            return
-        }
+        //     res.status(400).json({ message: 'completedAt must be a valid date' });
+        //     console.log('no es una fecha valida');
+        //     return
+        // }
 
+        console.log('=========>',updateTodoDto?.values);
         //actualizacon de los datos
         const updatedTodo = await prisma.todo.update({
             where: { id: id },
-            data: { text: text, completedAt: completedAt }
+            data: updateTodoDto!.values
         });
         res.json(updatedTodo);
         return;

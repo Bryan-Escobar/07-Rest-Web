@@ -19,19 +19,25 @@ class Server {
     constructor(options) {
         this.options = options;
         this.app = (0, express_1.default)();
-        this.port = options.port;
-        this.publicPath = options.publicPath;
+        const { port, routes, publicPath = 'public' } = options;
+        this.port = port;
+        this.publicPath = publicPath;
+        this.routes = routes;
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             //* Middlewares
+            this.app.use(express_1.default.json()); //indica que se va a recibir informacion en formato json
+            this.app.use(express_1.default.urlencoded({ extended: true })); //indica que se va a recibir informacion en formato urlencoded
             //* Public Folder
             this.app.use(express_1.default.static(this.publicPath));
             //indica que se va a enviar informacion de la carpeta public
+            //* routes
+            this.app.use(this.routes);
+            //* SPA
             //indica que cualquier solicitud que no coincida con las rutas definidas, recibira el contenido del index.html
             this.app.get('*', (req, res) => {
                 console.log(req.url);
-                //res.send('Hello World');
                 const indexPath = path_1.default.join(__dirname + `../../../${this.publicPath}/index.html`);
                 res.sendFile(indexPath);
             });

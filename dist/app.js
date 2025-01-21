@@ -10,11 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const envs_1 = require("./config/envs");
+const app_routes_1 = require("./presentation/app-routes");
 const server_1 = require("./presentation/server");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     main();
 }))();
 function main() {
-    const server = new server_1.Server({ port: envs_1.envs.PORT, publicPath: envs_1.envs.PUBLIC_PATH });
+    const server = new server_1.Server({ port: envs_1.envs.PORT,
+        publicPath: envs_1.envs.PUBLIC_PATH,
+        routes: app_routes_1.AppRoutes.routes
+    });
     server.start();
 }

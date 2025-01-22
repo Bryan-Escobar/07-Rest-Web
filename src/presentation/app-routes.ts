@@ -8,7 +8,6 @@ export class AppRoutes
     static get routes():Router
     {
         const router= Router();
-        const todoController=new TodosController();
 
         router.use('/api/todos',TodosRoutes.routes);
         //indica que las rutas definidas en la clase TodosRoutes se van a escuchar en '/api/todos'

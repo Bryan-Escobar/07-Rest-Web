@@ -12,7 +12,7 @@ export class TodoEntity
         //!!this.completedAt convierte la propiedad en un booleano
         //si es null, undefined o NaN, devuelve false
     }
-    public fromObject(object:{[key:string]:any})
+    public static fromObject(object:{[key:string]:any})
     {
         const {id,text,completedAt} = object;
         if(!id) throw 'Id is required';

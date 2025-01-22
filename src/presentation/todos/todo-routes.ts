@@ -1,13 +1,16 @@
 import { Router } from "express";
 import { TodosController } from "./controller";
-
+import { TodoDataSourceImpl } from "../../infrastructure/datasources/todo.datasource.impl";
+import { TodoRepositoryImpl } from "../../infrastructure/repositories/todo.repository.impl";
 export class TodosRoutes
 {
     //get indica que la funcion routes() es un getter
     static get routes():Router
     {
         const router= Router();
-        const todoController=new TodosController();
+        const datasource=new TodoDataSourceImpl();
+        const respository=new TodoRepositoryImpl(datasource);
+        const todoController=new TodosController(respository);
         router.get('/',todoController.getTodos);
         //se le pasan la request y response a la funcion getTodos automaticamente
 

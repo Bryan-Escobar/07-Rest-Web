@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import path from 'path';
+import compression from 'compression';
 interface Options {
     port: number;
     routes:Router;
@@ -24,6 +25,7 @@ export class Server {
         //* Middlewares
         this.app.use(express.json()); //indica que se va a recibir informacion en formato json
         this.app.use(express.urlencoded({ extended: true })); //indica que se va a recibir informacion en formato urlencoded
+        this.app.use(compression()); //indica que se va a comprimir la informacion que se envia al cliente
         //* Public Folder
         this.app.use(express.static(this.publicPath));
         //indica que se va a enviar informacion de la carpeta public

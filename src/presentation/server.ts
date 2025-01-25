@@ -3,17 +3,18 @@ import path from 'path';
 import compression from 'compression';
 interface Options {
     port: number;
-    routes:Router;
+    routes: Router;
     publicPath?: string;
 }
 export class Server {
-    private app = express();
+    public readonly app = express();
+    private serverListener?: any;
     private readonly port: number;
     private readonly publicPath: string;
     private readonly routes: Router;
 
     constructor(private options: Options) {
-        const { port, routes,publicPath = 'public' } = options;
+        const { port, routes, publicPath = 'public' } = options;
         this.port = port;
         this.publicPath = publicPath;
         this.routes = routes;
@@ -43,8 +44,14 @@ export class Server {
             res.sendFile(indexPath);
         })
         console.log('Server is running');
-        this.app.listen(this.port, () => {
+
+        this.serverListener = this.app.listen(this.port, () => {
             console.log('Server is running on port 3000');
         });
+
+
+    }
+    public close() {
+        this.serverListener.close();
     }
 }

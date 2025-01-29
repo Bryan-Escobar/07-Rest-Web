@@ -12,6 +12,7 @@ export class TodosController {
         if(error instanceof CustomError)
         {
             res.status(error.statusCode).json(error.message)
+            return;
         }
 
         //Todo:Grabar log
